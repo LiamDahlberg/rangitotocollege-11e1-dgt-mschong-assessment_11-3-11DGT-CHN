@@ -10,7 +10,7 @@ def drawFace(offsetX, offsetY):
 
 def callback(event):
     x, y = event.x, event.y
-    #canvas.moveto("face", x - 110, y - 25)
+    canvas.moveto("face", x - 110, y - 25)
 
 main = tkinter.Tk()
 main.title("eeby.. sleeby..")
