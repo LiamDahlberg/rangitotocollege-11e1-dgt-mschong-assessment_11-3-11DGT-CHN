@@ -1,7 +1,6 @@
 import tkinter
 import time
 
-global lastShotTime
 lastShotTime = time.time()
 
 def drawShip(offsetX, offsetY, scale):
@@ -47,10 +46,11 @@ def rightKey(event):
     canvas.move("space_ship", 10, 0)
 
 def upKey(event):
-    if time.time() - lastShotTime > 2:
+    global lastShotTime
+    if time.time() - lastShotTime > 0.1:
         gunId = canvas.find_withtag("space_ship")[3]
         drawProjectile(canvas.coords(gunId)[0], canvas.coords(gunId)[1],10)
-        #lastShotTime = time.time()
+        lastShotTime = time.time()
 
 def init():
     drawShip(400, 700, 10)
@@ -59,6 +59,8 @@ def init():
 def moveProj():
     for i in canvas.find_withtag("space_projectile"):
         canvas.move(i, 0, -10)
+        if canvas.coords(i)[3] < 0:
+            canvas.delete(i) # reduce amount of stuff game is keeping track of
 
     main.after(10, moveProj)
 
