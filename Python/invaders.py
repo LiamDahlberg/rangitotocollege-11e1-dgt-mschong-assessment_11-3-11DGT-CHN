@@ -2,6 +2,8 @@ import tkinter
 import time
 
 lastShotTime = time.time()
+canvas = None
+main = None
 
 def drawShip(offsetX, offsetY, scale):
     canvas.create_rectangle(offsetX, 1 * scale + offsetY, 13 * scale + offsetX, 4 * scale + offsetY, tags="space_ship", fill="#00FF00", width=0)
@@ -39,6 +41,9 @@ def drawInvader(offsetX, offsetY, scale, tag):
     canvas.create_rectangle(8 * scale + offsetX,  2 * scale + offsetY, 9 * scale + offsetX, 3 * scale + offsetY, tags=tag, fill="#00FF00", width=0)
     canvas.create_rectangle(6 * scale + offsetX,  3 * scale + offsetY, 8 * scale + offsetX, 4 * scale + offsetY, tags=tag, fill="#00FF00", width=0)
 
+def escapeKey(event):
+    main.withdraw()
+
 def leftKey(event):
     canvas.move("space_ship", -10, 0)
 
@@ -64,22 +69,16 @@ def moveProj():
 
     main.after(10, moveProj)
 
-if __name__ == "__main__":
-    main = tkinter.Tk()
-    main.title("eeby.. sleeby..")
+def run(main1, canvas1):
+    global main
+    global canvas
+    main = main1
+    canvas = canvas1
 
-    main.geometry("1024x768")
-    main.resizable(0, 0)
-    canvas = tkinter.Canvas(main,bg="#000000")
+    canvas.delete("all")
 
     init()
 
     drawProjectile(50, 50, 10)
 
     drawInvader(400, 100, 10, "invader")
-
-    canvas.pack(fill="both", expand=True) # fix canvas to the window size
-    main.bind('<Left>', leftKey)
-    main.bind('<Right>', rightKey)
-    main.bind('<Up>', upKey)
-    main.mainloop()
