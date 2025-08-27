@@ -15,6 +15,7 @@ def drawShip(offsetX, offsetY, scale):
 def drawProjectile(offsetX, offsetY, scale):
     canvas.create_rectangle(offsetX, offsetY, 1 * scale + offsetX, 3 * scale + offsetY, tags="space_projectile", fill="#00FF00", width=0)
 
+#class Invader: maybe later make this a class?
 def drawInvader(offsetX, offsetY, scale, tag):
     # main body
     canvas.create_rectangle(2 * scale + offsetX, 2 * scale + offsetY, 9 * scale + offsetX, -2 * scale + offsetY, tags=tag, fill="#00FF00", width=0)

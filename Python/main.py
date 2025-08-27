@@ -19,6 +19,14 @@ def escapeKey(event):
         match curGameIndex:
             case 0:
                 invaders.quit()
+            case 1:
+                pass
+            case 2:
+                pass
+            case 3:
+                pass
+            case 4:
+                pass
         init()
         inGame = False
 
@@ -41,6 +49,14 @@ def leftKey(event):
         match curGameIndex:
             case 0:
                 invaders.leftKey(event)
+            case 1:
+                pass
+            case 2:
+                pass
+            case 3:
+                pass
+            case 4:
+                pass
 
 def rightKey(event):
     global curGameIndex
@@ -62,6 +78,14 @@ def rightKey(event):
         match curGameIndex:
             case 0:
                 invaders.rightKey(event)
+            case 1:
+                pass
+            case 2:
+                pass
+            case 3:
+                pass
+            case 4:
+                pass
 
 
 def upKey(event):
@@ -70,14 +94,40 @@ def upKey(event):
         match curGameIndex:
             case 0:
                 invaders.init(main, canvas)
+            case 1:
+                pass
+            case 2:
+                pass
+            case 3:
+                pass
+            case 4:
+                pass
         
         inGame = True
     else:
         match curGameIndex:
             case 0:
                 invaders.upKey(event)
+            case 1:
+                pass
+            case 2:
+                pass
+            case 3:
+                pass
+            case 4:
+                pass
+
+def startAnimation():
+    alpha = 0
+    if alpha < 255:
+        alpha += 5
+        colour = '#%02x%02x%02x%02x' % (255, 255, 255, alpha)
+        canvas.create_oval(256, 128, 768, 650, fill=colour, width=0, stipple="grey" + str(alpha)) #test
+        main.after(500, startAnimation)
 
 def init():
+    startAnimation()
+
     canvas.create_text(512, 90, text=games[curGameIndex], fill="white", width=0, font=("Arial", 60, "bold"), tags="middle_text")
 
     #dimentions for the middle quater of the screen = 1024 * 0.25, 768 * 0.25 , 1024 * 0.75, 768 * 0.75
