@@ -1,9 +1,10 @@
-import tkinter
 import time
+import tkinter
 
 lastShotTime = time.time()
 canvas = None
 main = None
+moveProjId = None
 
 def drawShip(offsetX, offsetY, scale):
     canvas.create_rectangle(offsetX, 1 * scale + offsetY, 13 * scale + offsetX, 4 * scale + offsetY, tags="space_ship", fill="#00FF00", width=0)
@@ -57,19 +58,22 @@ def upKey(event):
         drawProjectile(canvas.coords(gunId)[0], canvas.coords(gunId)[1],10)
         lastShotTime = time.time()
 
-def init():
-    drawShip(400, 700, 10)
-    moveProj()
-
 def moveProj():
+    global moveProjId
+
     for i in canvas.find_withtag("space_projectile"):
         canvas.move(i, 0, -10)
         if canvas.coords(i)[3] < 0:
             canvas.delete(i) # reduce amount of stuff game is keeping track of
 
-    main.after(10, moveProj)
+    moveProjId = main.after(10, moveProj)
 
-def run(main1, canvas1):
+def quit():
+    canvas.delete("all")
+    if moveProjId != None:
+        main.after_cancel(moveProjId)
+
+def init(main1, canvas1):
     global main
     global canvas
     main = main1
@@ -77,7 +81,8 @@ def run(main1, canvas1):
 
     canvas.delete("all")
 
-    init()
+    drawShip(400, 700, 10)
+    moveProj()
 
     drawProjectile(50, 50, 10)
 
