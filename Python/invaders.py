@@ -6,6 +6,9 @@ canvas = None
 main = None
 moveProjId = None
 
+def getName():
+    return "Space Invaders"
+
 def drawShip(offsetX, offsetY, scale):
     canvas.create_rectangle(offsetX, 1 * scale + offsetY, 13 * scale + offsetX, 4 * scale + offsetY, tags="space_ship", fill="#00FF00", width=0)
     canvas.create_rectangle(1 * scale + offsetX, offsetY, 12 * scale + offsetX, 1 * scale + offsetY, tags="space_ship", fill="#00FF00", width=0)
@@ -74,6 +77,14 @@ def quit():
     if moveProjId != None:
         main.after_cancel(moveProjId)
 
+def initRender():
+    drawShip(400, 700, 10)
+    moveProj()
+
+    drawProjectile(50, 50, 10)
+
+    drawInvader(400, 100, 10, "invader")
+
 def init(main1, canvas1):
     global main
     global canvas
@@ -82,9 +93,4 @@ def init(main1, canvas1):
 
     canvas.delete("all")
 
-    drawShip(400, 700, 10)
-    moveProj()
-
-    drawProjectile(50, 50, 10)
-
-    drawInvader(400, 100, 10, "invader")
+    main.after(2000, initRender) # cancel this thread on escape thingie
