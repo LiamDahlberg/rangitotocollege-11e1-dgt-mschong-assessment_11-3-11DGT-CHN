@@ -64,10 +64,11 @@ def upKey(event):
     if inGame == False:
         global alpha
         alpha = 0
+        inGame = True
         startAnimation()
         games[curGameIndex].init(main, canvas)
         
-        inGame = True
+       
     else:
         games[curGameIndex].upKey(event)
 

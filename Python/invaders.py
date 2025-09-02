@@ -1,13 +1,29 @@
 import time
 import tkinter
 
+name = "Space Invaders"
 lastShotTime = time.time()
 canvas = None
 main = None
 moveProjId = None
+moveInvadersId = None
+round = 1
+entityList = []
+invaderStage = 1
 
 def getName():
-    return "Space Invaders"
+    return name
+
+def startRound(originX, originY, round):
+    global invaderStage
+    invaderStage = 1
+
+    x = originX
+    y = originY
+    for i in range(round * 2): # for each round spawn * 2 amount of invaders with increasing tags (add to list for tracking)
+        drawInvader(x, y, 10, "invader" + str(i))
+        x += 120 # spacing between each invader
+        entityList.append("invader" + str(i))
 
 def drawShip(offsetX, offsetY, scale):
     canvas.create_rectangle(offsetX, 1 * scale + offsetY, 13 * scale + offsetX, 4 * scale + offsetY, tags="space_ship", fill="#00FF00", width=0)
@@ -64,7 +80,6 @@ def upKey(event):
 
 def moveProj():
     global moveProjId
-
     for i in canvas.find_withtag("space_projectile"):
         canvas.move(i, 0, -10)
         if canvas.coords(i)[3] < 0:
@@ -72,25 +87,45 @@ def moveProj():
 
     moveProjId = main.after(10, moveProj)
 
+def moveInvaders():
+    global moveInvadersId
+    global invaderStage
+    shouldNext = False
+
+    for ent in entityList:
+        for i in canvas.find_withtag(ent):
+            if invaderStage % 2 != 0:
+                canvas.move(i, 50, 0)
+            else:
+                canvas.move(i, -50, 0)
+            coords = canvas.coords(ent)
+            if coords[2] > 1024 - 100 or coords[0] < 100:
+                shouldNext = True
+
+    if shouldNext:
+        invaderStage += 1
+        print(ent)
+
+    moveInvadersId = main.after(1000, moveInvaders)
+
 def quit():
     canvas.delete("all")
     if moveProjId != None:
         main.after_cancel(moveProjId)
+    if moveInvadersId != None:
+        main.after_cancel(moveInvadersId)
 
 def initRender():
     drawShip(400, 700, 10)
-    moveProj()
-
-    drawProjectile(50, 50, 10)
-
-    drawInvader(400, 100, 10, "invader")
+    startRound(50, 100, round)
+    moveInvaders()
 
 def init(main1, canvas1):
     global main
     global canvas
-    main = main1
-    canvas = canvas1
-
+    main = main1 # setting globals for canvas and main so we dont make multiple canvases
+    canvas = canvas1 
     canvas.delete("all")
 
-    main.after(2000, initRender) # cancel this thread on escape thingie
+    moveProj() # start proj move loop
+    main.after(2000, initRender) # cancel this loop on escape thingie
