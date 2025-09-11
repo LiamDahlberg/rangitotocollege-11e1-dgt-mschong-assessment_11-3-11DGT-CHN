@@ -1,11 +1,12 @@
 import tkinter
 import invaders
+import pong
 
 # CONSTANTS
 games = [
     invaders,
-    invaders, # "Packman"
-    "Pong",
+    pong, # "Packman"
+    pong,
     "Snake",
     "Tetris"
 ]
@@ -72,6 +73,12 @@ def upKey(event):
     else:
         games[curGameIndex].upKey(event)
 
+def downKey(event):
+    if inGame == False:
+        pass
+    else:
+        games[curGameIndex].downKey(event)
+
 def startAnimation():
     global alpha
     if alpha < 100:
@@ -115,5 +122,6 @@ canvas.pack(fill="both", expand=True) # fix canvas to the window size
 main.bind('<Left>', leftKey)
 main.bind('<Right>', rightKey)
 main.bind('<Up>', upKey)
+main.bind('<Down>', downKey)
 main.bind('<Escape>', escapeKey)
 main.mainloop()

@@ -78,6 +78,9 @@ def leftKey(event):
 def rightKey(event):
     canvas.move("space_ship", 10, 0)
 
+def downKey(event):
+    pass
+
 def upKey(event):
     global lastShotTime
     if time.time() - lastShotTime > 0.5:
