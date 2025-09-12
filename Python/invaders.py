@@ -11,9 +11,15 @@ initId = None
 round = 1
 entityList = []
 invaderStage = 1
+keysPressed = []
+keysId = None
 
 def getName():
     return name
+
+def setPressed(list):
+    global keysPressed
+    keysPressed = list
 
 def startRound(originX, originY, round):
     global invaderStage
@@ -26,9 +32,9 @@ def startRound(originX, originY, round):
 
     for i in range(round * 2): # for each round spawn * 2 amount of invaders with increasing tags (add to list for tracking)
         invadersOnRow += 1
-        if invadersOnRow > 10:
+        if invadersOnRow > 15:
             y += 50 # move invaders down if too many on screen
-            invadersOnRow = 1 # reset count to one because otherwise we add 11 instead of 10 next time
+            invadersOnRow = 1 # reset count to one because otherwise we add 16 instead of 15 next time
             x = originX
 
         drawInvader(x, y, 5, "invader" + str(i))
@@ -72,21 +78,22 @@ def drawInvader(offsetX, offsetY, scale, tag):
     canvas.create_rectangle(8 * scale + offsetX,  2 * scale + offsetY, 9 * scale + offsetX, 3 * scale + offsetY, tags=tag, fill="#00FF00", width=0)
     canvas.create_rectangle(6 * scale + offsetX,  3 * scale + offsetY, 8 * scale + offsetX, 4 * scale + offsetY, tags=tag, fill="#00FF00", width=0)
 
-def leftKey(event):
+def leftKey():
     canvas.move("space_ship", -10, 0)
 
-def rightKey(event):
+def rightKey():
     canvas.move("space_ship", 10, 0)
 
-def downKey(event):
+def downKey():
     pass
 
-def upKey(event):
+def upKey():
     global lastShotTime
     if time.time() - lastShotTime > 0.5:
         gunId = canvas.find_withtag("space_ship")[3]
         drawProjectile(canvas.coords(gunId)[0], canvas.coords(gunId)[1],10)
         lastShotTime = time.time()
+
 
 def moveProj():
     global moveProjId
@@ -149,7 +156,7 @@ def moveInvaders():
                     else:
                         canvas.move(i, -50, 50) # move left or right depending on stage and down
 
-    moveInvadersId = main.after(1000, moveInvaders) # loop to move invaders
+    moveInvadersId = main.after(500, moveInvaders) # loop to move invaders
 
 def gameOver():
     canvas.delete("all") # gameover
@@ -171,12 +178,27 @@ def quit():
         main.after_cancel(moveInvadersId)
     if initId != None:
         main.after_cancel(initId)
+    if keysId != None:
+        main.after_cancel(keysId)
 
 def initRender():
     drawShip(400, 700, 10)
     startRound(50, 100, round)
     moveInvaders()
+    checkKeys()
     canvas.create_text(512, 20, text="Round: " + str(round), fill="white", width=0, font=("Arial", 26, "bold"), tags="round")
+
+def checkKeys():
+    global keysId
+    if "Left" in keysPressed:
+        leftKey()
+    if "Right" in keysPressed:
+        rightKey()
+    if "Up" in keysPressed:
+        upKey()
+    if "Down" in keysPressed:
+        downKey()
+    keysId = main.after(25, checkKeys)
 
 def init(main1, canvas1):
     global main
